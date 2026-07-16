@@ -1,0 +1,97 @@
+[
+    {
+        "title": "Come Along for the Ride",
+        "description": "New episodes, behind-the-scenes footage, and first looks at where Coal Pick heads next.",
+        "labelPlacement": "hidden_label",
+        "descriptionPlacement": "below",
+        "button": {
+            "type": "text",
+            "text": "Sign Me Up",
+            "imageUrl": "",
+            "width": "auto",
+            "location": "bottom",
+            "layoutGridColumnSpan": 12,
+            "conditionalLogic": null
+        },
+        "fields": [
+            {
+                "type": "email",
+                "id": 1,
+                "formId": 1,
+                "label": "Email Address",
+                "adminLabel": "",
+                "isRequired": true,
+                "size": "large",
+                "errorMessage": "",
+                "visibility": "visible",
+                "inputs": null,
+                "placeholder": "your@email.com",
+                "description": "",
+                "emailConfirmEnabled": false,
+                "cssClass": "",
+                "inputType": "",
+                "labelPlacement": "",
+                "descriptionPlacement": "",
+                "defaultValue": "",
+                "autocompleteAttribute": "email",
+                "pageNumber": 1,
+                "displayOnly": false
+            }
+        ],
+        "version": "2.8",
+        "id": 1,
+        "useCurrentUserAsAuthor": true,
+        "postContentTemplateEnabled": false,
+        "postTitleTemplateEnabled": false,
+        "postTitleTemplate": "",
+        "postContentTemplate": "",
+        "lastPageButton": null,
+        "pagination": null,
+        "firstPageCssClass": "",
+        "subLabelPlacement": "",
+        "cssClass": "signup",
+        "enableHoneypot": true,
+        "enableAnimation": false,
+        "save": {
+            "enabled": false,
+            "button": {
+                "type": "link",
+                "text": "Save and Continue Later"
+            }
+        },
+        "limitEntries": false,
+        "limitEntriesCount": "",
+        "limitEntriesPeriod": "",
+        "limitEntriesMessage": "",
+        "scheduleForm": false,
+        "requireLogin": false,
+        "requireLoginMessage": "",
+        "confirmations": {
+            "5f3a1b2c9d0e1": {
+                "id": "5f3a1b2c9d0e1",
+                "name": "Default Confirmation",
+                "isDefault": true,
+                "type": "message",
+                "message": "Thanks — you're on the list.",
+                "url": "",
+                "pageId": "",
+                "queryString": ""
+            }
+        },
+        "notifications": {
+            "5f3a1b2c9d0e2": {
+                "id": "5f3a1b2c9d0e2",
+                "isActive": true,
+                "to": "{admin_email}",
+                "name": "Admin Notification",
+                "event": "form_submission",
+                "toType": "email",
+                "subject": "New signup: Come Along for the Ride",
+                "message": "A new subscriber signed up.\n\nEmail Address: {Email Address:1}"
+            }
+        },
+        "is_active": "1",
+        "date_created": "2026-07-16 10:00:00",
+        "is_trash": "0"
+    }
+]
