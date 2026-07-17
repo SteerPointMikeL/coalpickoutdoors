@@ -31,6 +31,42 @@ function cpo_register_options_page() {
 add_action( 'acf/init', 'cpo_register_options_page' );
 
 /**
+ * Force this theme's Local JSON field groups to sync into the database
+ * whenever the theme is activated.
+ *
+ * Without this, a field group previously saved to the database (for example
+ * by an earlier WXR import attempt, a manual field-group edit, or a prior
+ * version of this theme) can silently take precedence over the field group
+ * defined in acf-json/, because ACF only lets Local JSON override the
+ * database copy when the JSON file's `modified` timestamp is newer than the
+ * database copy's. If a stale database copy of "page_sections" exists with
+ * an incompatible or missing flexible_content definition, get_field() falls
+ * back to returning the raw postmeta value unconverted -- which is exactly
+ * the "page_sections field stored as a simple integer" symptom. Force-
+ * importing on every theme activation guarantees the JSON files in this
+ * theme are always the source of truth.
+ */
+function cpo_sync_acf_json_on_activation() {
+	if ( ! function_exists( 'acf_get_local_json_files' ) || ! function_exists( 'acf_import_field_group' ) ) {
+		return;
+	}
+
+	$json_files = acf_get_local_json_files();
+
+	foreach ( $json_files as $file ) {
+		$json_content = file_get_contents( $file );
+		$field_group  = json_decode( $json_content, true );
+
+		if ( empty( $field_group ) || empty( $field_group['key'] ) ) {
+			continue;
+		}
+
+		acf_import_field_group( $field_group );
+	}
+}
+add_action( 'after_switch_theme', 'cpo_sync_acf_json_on_activation' );
+
+/**
  * Render an ACF link array as an anchor tag. Returns empty string if no URL.
  *
  * @param array|null $link    ACF link field value (url/title/target).

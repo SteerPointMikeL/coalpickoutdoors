@@ -28,7 +28,10 @@ Install and activate the following before importing anything:
 
 After activating the theme with ACF PRO active, confirm the field groups
 **"Page Builder"** and **"Theme Settings"** appear under **Custom Fields →
-Field Groups** (they load from the theme's `acf-json/` folder).
+Field Groups** (they load from the theme's `acf-json/` folder). As of this
+version, activating the theme also force-syncs these Local JSON field groups
+into the database (see Troubleshooting below), so re-activating the theme is
+a safe way to resolve a stale field-group definition if you ever see one.
 
 ---
 
@@ -160,6 +163,57 @@ If importing onto a non-empty site, after import **open the Home page in the
 editor and re-select each image** in the flexible-content sections (hero
 background, The Land photo, the three wildlife cards, Sydney's photo, and the
 four episode thumbnails) to repair the references.
+
+---
+
+## Troubleshooting: "Page Sections" field shows as a plain number instead of the page content
+
+If `get_field('page_sections')` on the Home page returns a bare integer (e.g.
+`7`) instead of an array of section rows, and the front end renders blank,
+this is **not** a WXR/data problem — it's an ACF field-registration problem.
+We verified this directly: importing this package's `wxr/coal-pick-outdoors-content.xml`
+into a real WordPress install and inspecting `wp_postmeta` afterward showed
+the data lands exactly as intended — `page_sections` = `7` (the row count,
+per ACF's own flexible-content storage convention), `_page_sections` =
+`field_page_sections` (the correct reference key), and all 7 rows'
+`page_sections_N_acf_fc_layout` keys present and correctly ordered (`hero`,
+`image_content`, `wildlife_grid`, `image_content`, `series_carousel`,
+`story_band`, `signup_cta`). That integer is the *correct* raw value — ACF is
+supposed to convert it into an array of rows at read time using the field
+definition in `acf-json/group_page_builder.json`. If it doesn't, ACF could
+not resolve that field definition when the page rendered. Check these causes,
+in order of likelihood:
+
+1. **A stale field-group definition already exists in the database.** ACF's
+   Local JSON only lets a theme's `acf-json/*.json` file override a
+   database-stored copy of the same field group when the JSON file's
+   `modified` timestamp is *newer* than the database copy's. If an earlier
+   import attempt, a manual field-group edit, or a previous version of this
+   theme left behind a database copy of `group_page_builder` with a
+   different or incomplete definition (e.g. `page_sections` saved as a plain
+   number field instead of `flexible_content`), that stale copy can silently
+   win. **Fix:** re-activate the theme (Appearance → Themes → activate a
+   different theme, then activate Coal Pick Outdoors again) — this now
+   force-imports the Local JSON field groups into the database on every
+   activation, overwriting any stale copy. Or manually delete the "Page
+   Builder" / "Theme Settings" entries under **Custom Fields → Field Groups**
+   in wp-admin if they look wrong; they will reappear correctly from Local
+   JSON.
+2. **ACF PRO isn't actually active** (only the free version, or no ACF at
+   all). `flexible_content` is a PRO-only field type. If ACF can't find a
+   handler for that type, `get_field()` returns the raw postmeta value
+   unconverted — this looks identical to symptom described above. **Fix:**
+   confirm Advanced Custom Fields **PRO** (not the free plugin) is installed,
+   activated, and licensed.
+3. **The theme wasn't active when the field groups needed to load**, or a
+   different theme is active. Local JSON is only read from the *active*
+   theme's `acf-json/` folder. **Fix:** activate the Coal Pick Outdoors theme
+   before checking field groups or importing content.
+4. After fixing the above, open the Home page in **wp-admin's editor** (not
+   just the front end) and confirm the "Page Sections" flexible-content rows
+   render correctly there. This isolates the problem to ACF's field
+   resolution (editor also broken) vs. a front-end template bug (editor
+   fine, front end blank).
 
 ---
 
