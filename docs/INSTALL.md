@@ -203,6 +203,37 @@ array of layout names (not an integer), and that no `_N_acf_fc_layout`
 postmeta rows exist for it.
 
 ---
+## Fixed: Gravity Forms import said "not compatible with your current version"
+
+An earlier version of `gravityforms/come-along-for-the-ride-form.json` was a
+bare JSON **array** wrapping the form object (`[ { ...form... } ]`). That is
+not the format Gravity Forms actually reads. **This has been fixed.**
+
+Gravity Forms' own exporter (`GFExport::export_forms()`) builds the download
+file as a top-level JSON **object**: the form(s) keyed by their array index
+(`"0"`, `"1"`, ...) plus a sibling `"version"` key set to the exporting
+site's Gravity Forms version — e.g. `{"0": {...}, "version": "2.10.5"}`. On
+import, `GFExport::import_json()` decodes the file and immediately checks
+`$forms['version']` against a minimum supported version; if that top-level
+`version` key is missing (as it was when the file was a plain array), the
+import aborts with exactly the error reported: *"Forms could not be
+imported. Your export file is not compatible with your current version of
+Gravity Forms."* We confirmed this by reading Gravity Forms' own `export.php`
+source (checked against both an older mirror and a 2.9.5-era mirror — the
+check is unchanged across versions).
+
+The file has been corrected to the real format: a top-level object with the
+form under key `"0"` and `"version": "2.10.5"` alongside it. We also changed
+`confirmations` and `notifications` from objects keyed by confirmation/
+notification ID to plain indexed arrays, matching Gravity Forms'
+`prepare_forms_for_export()` behavior (`array_values()`), for full fidelity
+with a real export file.
+
+If you regenerate or hand-edit this file in the future, make sure the
+top-level JSON structure stays an object with a `version` key — not a bare
+array of form objects.
+
+---
 ## Quick checklist
 
 - [ ] ACF PRO + Gravity Forms active; theme activated
