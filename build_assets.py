@@ -243,6 +243,18 @@ SECTIONS = [
 # --------------------------------------------------------------------------
 # Meta emission
 # --------------------------------------------------------------------------
+def php_serialize_string(s):
+    b = s.encode("utf-8")
+    return 's:%d:"%s";' % (len(b), s)
+
+def php_serialize_array_of_strings(items):
+    parts = ["a:%d:{" % len(items)]
+    for i, item in enumerate(items):
+        parts.append("i:%d;" % i)
+        parts.append(php_serialize_string(item))
+    parts.append("}")
+    return "".join(parts)
+
 def serialize_value(ftype, value):
     if ftype == "link":
         return php_link(value)
@@ -267,11 +279,11 @@ def emit_fields(prefix, fields, values, out):
 
 def emit_page_sections():
     out = []
-    out.append(("page_sections", str(len(SECTIONS))))
+    layout_names = [layout for layout, _vals in SECTIONS]
+    out.append(("page_sections", php_serialize_array_of_strings(layout_names)))
     out.append(("_page_sections", "field_page_sections"))
     for i, (layout, vals) in enumerate(SECTIONS):
         _lkey, _label, fields = SCHEMA[layout]
-        out.append(("page_sections_%d_acf_fc_layout" % i, layout))
         emit_fields("page_sections_%d" % i, fields, vals, out)
     return out
 

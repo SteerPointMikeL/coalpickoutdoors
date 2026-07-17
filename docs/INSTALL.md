@@ -166,57 +166,43 @@ four episode thumbnails) to repair the references.
 
 ---
 
-## Troubleshooting: "Page Sections" field shows as a plain number instead of the page content
+## Fixed: "Page Sections" field previously stored as a plain integer
 
-If `get_field('page_sections')` on the Home page returns a bare integer (e.g.
-`7`) instead of an array of section rows, and the front end renders blank,
-this is **not** a WXR/data problem — it's an ACF field-registration problem.
-We verified this directly: importing this package's `wxr/coal-pick-outdoors-content.xml`
-into a real WordPress install and inspecting `wp_postmeta` afterward showed
-the data lands exactly as intended — `page_sections` = `7` (the row count,
-per ACF's own flexible-content storage convention), `_page_sections` =
-`field_page_sections` (the correct reference key), and all 7 rows'
-`page_sections_N_acf_fc_layout` keys present and correctly ordered (`hero`,
-`image_content`, `wildlife_grid`, `image_content`, `series_carousel`,
-`story_band`, `signup_cta`). That integer is the *correct* raw value — ACF is
-supposed to convert it into an array of rows at read time using the field
-definition in `acf-json/group_page_builder.json`. If it doesn't, ACF could
-not resolve that field definition when the page rendered. Check these causes,
-in order of likelihood:
+An earlier version of this package's WXR file stored the `page_sections`
+meta value as a bare row-count integer (e.g. `7`), which caused
+`get_field('page_sections')` / `have_rows('page_sections')` to fail to
+resolve any rows on import. **This has been fixed** and is confirmed working
+as of the current `wxr/coal-pick-outdoors-content.xml`.
 
-1. **A stale field-group definition already exists in the database.** ACF's
-   Local JSON only lets a theme's `acf-json/*.json` file override a
-   database-stored copy of the same field group when the JSON file's
-   `modified` timestamp is *newer* than the database copy's. If an earlier
-   import attempt, a manual field-group edit, or a previous version of this
-   theme left behind a database copy of `group_page_builder` with a
-   different or incomplete definition (e.g. `page_sections` saved as a plain
-   number field instead of `flexible_content`), that stale copy can silently
-   win. **Fix:** re-activate the theme (Appearance → Themes → activate a
-   different theme, then activate Coal Pick Outdoors again) — this now
-   force-imports the Local JSON field groups into the database on every
-   activation, overwriting any stale copy. Or manually delete the "Page
-   Builder" / "Theme Settings" entries under **Custom Fields → Field Groups**
-   in wp-admin if they look wrong; they will reappear correctly from Local
-   JSON.
-2. **ACF PRO isn't actually active** (only the free version, or no ACF at
-   all). `flexible_content` is a PRO-only field type. If ACF can't find a
-   handler for that type, `get_field()` returns the raw postmeta value
-   unconverted — this looks identical to symptom described above. **Fix:**
-   confirm Advanced Custom Fields **PRO** (not the free plugin) is installed,
-   activated, and licensed.
-3. **The theme wasn't active when the field groups needed to load**, or a
-   different theme is active. Local JSON is only read from the *active*
-   theme's `acf-json/` folder. **Fix:** activate the Coal Pick Outdoors theme
-   before checking field groups or importing content.
-4. After fixing the above, open the Home page in **wp-admin's editor** (not
-   just the front end) and confirm the "Page Sections" flexible-content rows
-   render correctly there. This isolates the problem to ACF's field
-   resolution (editor also broken) vs. a front-end template bug (editor
-   fine, front end blank).
+For anyone maintaining this theme in the future: ACF's flexible content
+field type does **not** store its row count the way a repeater field does.
+We verified the actual, current (ACF Pro 6.8.6) storage format directly by
+calling `update_field()` in a real ACF Pro installation and inspecting the
+raw `wp_postmeta` row it produced:
+
+- **Repeater fields** store a plain integer row count as the main meta
+  value (e.g. `3`).
+- **Flexible content fields** store a **PHP-serialized array of layout
+  names, in row order**, as the main meta value — e.g.
+  `a:7:{i:0;s:4:"hero";i:1;s:13:"image_content";...}` — *not* an integer,
+  and *not* a separate `_N_acf_fc_layout` postmeta row per row (that
+  convention does not apply to flexible content and was the source of the
+  original bug).
+- Sub-field values are still stored as flat `page_sections_N_subfieldname`
+  rows with a `_page_sections_N_subfieldname` reference to the sub-field's
+  key, same as repeaters.
+
+We confirmed this end-to-end by importing the corrected WXR file into a real
+WordPress install with the real ACF Pro plugin active and calling
+`get_field('page_sections', $post_id)` directly: it returns all 7 rows, in
+the correct order, with every sub-field value intact.
+
+If you ever see this symptom again after modifying `build_assets.py` or the
+WXR by hand, check that the main `page_sections` meta value is a serialized
+array of layout names (not an integer), and that no `_N_acf_fc_layout`
+postmeta rows exist for it.
 
 ---
-
 ## Quick checklist
 
 - [ ] ACF PRO + Gravity Forms active; theme activated

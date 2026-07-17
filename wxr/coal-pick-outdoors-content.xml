@@ -445,15 +445,11 @@
 			</wp:postmeta>
 			<wp:postmeta>
 				<wp:meta_key><![CDATA[page_sections]]></wp:meta_key>
-				<wp:meta_value><![CDATA[7]]></wp:meta_value>
+				<wp:meta_value><![CDATA[a:7:{i:0;s:4:"hero";i:1;s:13:"image_content";i:2;s:13:"wildlife_grid";i:3;s:13:"image_content";i:4;s:15:"series_carousel";i:5;s:10:"story_band";i:6;s:10:"signup_cta";}]]></wp:meta_value>
 			</wp:postmeta>
 			<wp:postmeta>
 				<wp:meta_key><![CDATA[_page_sections]]></wp:meta_key>
 				<wp:meta_value><![CDATA[field_page_sections]]></wp:meta_value>
-			</wp:postmeta>
-			<wp:postmeta>
-				<wp:meta_key><![CDATA[page_sections_0_acf_fc_layout]]></wp:meta_key>
-				<wp:meta_value><![CDATA[hero]]></wp:meta_value>
 			</wp:postmeta>
 			<wp:postmeta>
 				<wp:meta_key><![CDATA[page_sections_0_hero_eyebrow]]></wp:meta_key>
@@ -584,10 +580,6 @@
 				<wp:meta_value><![CDATA[field_stat_label]]></wp:meta_value>
 			</wp:postmeta>
 			<wp:postmeta>
-				<wp:meta_key><![CDATA[page_sections_1_acf_fc_layout]]></wp:meta_key>
-				<wp:meta_value><![CDATA[image_content]]></wp:meta_value>
-			</wp:postmeta>
-			<wp:postmeta>
 				<wp:meta_key><![CDATA[page_sections_1_anchor_id]]></wp:meta_key>
 				<wp:meta_value><![CDATA[land]]></wp:meta_value>
 			</wp:postmeta>
@@ -714,10 +706,6 @@
 			<wp:postmeta>
 				<wp:meta_key><![CDATA[_page_sections_1_cta]]></wp:meta_key>
 				<wp:meta_value><![CDATA[field_ic_cta]]></wp:meta_value>
-			</wp:postmeta>
-			<wp:postmeta>
-				<wp:meta_key><![CDATA[page_sections_2_acf_fc_layout]]></wp:meta_key>
-				<wp:meta_value><![CDATA[wildlife_grid]]></wp:meta_value>
 			</wp:postmeta>
 			<wp:postmeta>
 				<wp:meta_key><![CDATA[page_sections_2_anchor_id]]></wp:meta_key>
@@ -928,10 +916,6 @@
 				<wp:meta_value><![CDATA[field_wg_tag_text]]></wp:meta_value>
 			</wp:postmeta>
 			<wp:postmeta>
-				<wp:meta_key><![CDATA[page_sections_3_acf_fc_layout]]></wp:meta_key>
-				<wp:meta_value><![CDATA[image_content]]></wp:meta_value>
-			</wp:postmeta>
-			<wp:postmeta>
 				<wp:meta_key><![CDATA[page_sections_3_anchor_id]]></wp:meta_key>
 				<wp:meta_value><![CDATA[host]]></wp:meta_value>
 			</wp:postmeta>
@@ -1026,10 +1010,6 @@
 			<wp:postmeta>
 				<wp:meta_key><![CDATA[_page_sections_3_cta]]></wp:meta_key>
 				<wp:meta_value><![CDATA[field_ic_cta]]></wp:meta_value>
-			</wp:postmeta>
-			<wp:postmeta>
-				<wp:meta_key><![CDATA[page_sections_4_acf_fc_layout]]></wp:meta_key>
-				<wp:meta_value><![CDATA[series_carousel]]></wp:meta_value>
 			</wp:postmeta>
 			<wp:postmeta>
 				<wp:meta_key><![CDATA[page_sections_4_anchor_id]]></wp:meta_key>
@@ -1312,10 +1292,6 @@
 				<wp:meta_value><![CDATA[field_sc_ep_link]]></wp:meta_value>
 			</wp:postmeta>
 			<wp:postmeta>
-				<wp:meta_key><![CDATA[page_sections_5_acf_fc_layout]]></wp:meta_key>
-				<wp:meta_value><![CDATA[story_band]]></wp:meta_value>
-			</wp:postmeta>
-			<wp:postmeta>
 				<wp:meta_key><![CDATA[page_sections_5_anchor_id]]></wp:meta_key>
 				<wp:meta_value><![CDATA[story]]></wp:meta_value>
 			</wp:postmeta>
@@ -1363,10 +1339,6 @@ and the ground beneath it.]]></wp:meta_value>
 			<wp:postmeta>
 				<wp:meta_key><![CDATA[_page_sections_5_cta]]></wp:meta_key>
 				<wp:meta_value><![CDATA[field_sb_cta]]></wp:meta_value>
-			</wp:postmeta>
-			<wp:postmeta>
-				<wp:meta_key><![CDATA[page_sections_6_acf_fc_layout]]></wp:meta_key>
-				<wp:meta_value><![CDATA[signup_cta]]></wp:meta_value>
 			</wp:postmeta>
 			<wp:postmeta>
 				<wp:meta_key><![CDATA[page_sections_6_anchor_id]]></wp:meta_key>
